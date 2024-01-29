@@ -18,6 +18,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" & isset($_POST["product_id"])) {
     $productPrice = $_POST['product_price'];
     $productQuantity = $_POST['product_quantity'];
 
+    if ($productQuantity <= 0) {
+        echo "ERROR: Quantity must not be 0.";
+    }
+
     $sql = 'SELECT id FROM tempcart WHERE id = ?';
     $result = $conn -> execute_query($sql, [$productId]);
     $exists = $result -> num_rows;
