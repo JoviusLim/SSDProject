@@ -12,7 +12,6 @@ if ($conn -> connect_error) {
 }
 
 // Handling cart
-
 if ($_SERVER["REQUEST_METHOD"] == "POST" & isset($_POST["add_to_cart"])) {
     $productId = $_POST['product_id'];
     $productName = $_POST['product_name'];
@@ -20,5 +19,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" & isset($_POST["add_to_cart"])) {
     $productQuantity = $_POST['product_quantity'];
 
     $sql = 'INSERT INTO tempcart (id, name, price, quantity) VALUES ($productID, $productName, $productPrice)';
-    // $result = $conn -> query($sql);
+    $result = $conn -> query($sql);
 }
