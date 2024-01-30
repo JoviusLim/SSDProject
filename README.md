@@ -30,7 +30,7 @@ I used Bootstrap for styles, PHP for serverside.
   'id', 'name', 'price', 'quantity'
 
 -  **Table: 'products'**
-  'id', 'name', 'price', 'ImageRef', 'Desc'
+  'id', 'name', 'price', 'ImageRef', 'Description'
 
 -  **Table: 'checkout'**
   'orderID', 'product_id', 'product_name', 'product_price', 'product_quantity'
