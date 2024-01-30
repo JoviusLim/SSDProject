@@ -36,6 +36,27 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" & isset($_POST['delete'])) {
     $resp = "Product ID: $productDeleteID sucessfully removed from cart!";
 }
 
+// Edit Cart Items
+if ($_SERVER['REQUEST_METHOD'] == "POST" & isset($_POST['edit']) | isset($_POST['update'])) {
+    if (isset($_POST['edit'])) {
+        $editmode = $_POST['edit'];
+    }
+
+    if (isset($_POST['update'])) {
+        $editmode = null;
+        $updateid = $_POST['update'];
+        $updatequantity = $_POST['updatequantity'];
+
+        if ($updateid > 0) {
+            $sql = 'UPDATE tempcart SET quantity = ? WHERE id = ?';
+            $result = $conn->execute_query($sql, [$updatequantity, $updateid]);
+            $resp = "Product ID: $updateid successfully updated!";
+        } else {
+            $resp = "Product ID: $updateid failed to update! The quantity amount must not be 0 or less.";
+        }
+    }
+}
+
 // Getting the items in the cart
 $cartList = [];
 $result = $conn->query('SELECT * FROM tempcart');
@@ -111,8 +132,26 @@ $conn->close();
                                 <th scope="row"><?= $cartProduct['id'] ?></th>
                                 <td><?= $cartProduct['name'] ?></td>
                                 <td>$<?= $cartProduct['price'] ?></td>
-                                <td><?= $cartProduct['quantity'] ?></td>
-                                <td><button class="btn btn-primary" type="submit" name='edit' value='<?= $cartProduct['id'] ?>'>EDIT</button></td>
+                                <td>
+                                    <?php if (isset($editmode)) : ?>
+                                        <?php if ($editmode == $cartProduct['id']) : ?>
+                                            <input type="number" name="updatequantity" value="<?= $cartProduct['quantity'] ?>">
+                                        <?php else : ?>
+                                            <?= $cartProduct['quantity'] ?>
+                                        <?php endif; ?>
+                                    <?php else : ?>
+                                        <?= $cartProduct['quantity'] ?>
+                                    <?php endif; ?>
+                                </td>
+                                <?php if (isset($editmode)) : ?>
+                                    <?php if ($editmode == $cartProduct['id']) : ?>
+                                        <td><button class="btn btn-primary" type="submit" name='update' value='<?= $cartProduct['id'] ?>'>UPDATE</button></td>
+                                    <?php else : ?>
+                                        <td><button class="btn btn-primary" type="submit" name='edit' value='<?= $cartProduct['id'] ?>'>EDIT</button></td>
+                                        <?php endif; ?>
+                                <?php else : ?>
+                                        <td><button class="btn btn-primary" type="submit" name='edit' value='<?= $cartProduct['id'] ?>'>EDIT</button></td>
+                                <?php endif; ?>
                                 <td><button class="btn btn-danger" type="submit" name='delete' value='<?= $cartProduct['id'] ?>'>DELETE</button></td>
                             </form>
                         </tr>
