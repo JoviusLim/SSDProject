@@ -3,12 +3,11 @@ require 'db.php';
 
 if ($_SERVER['REQUEST_METHOD'] == "POST" & isset($_POST['product_topage_id'])) {
   $product_id = $_POST["product_topage_id"];
-  $product_page = [];
   $result = $conn->execute_query('SELECT * FROM products WHERE id = ?', [$product_id]);
 
   if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
-      $product_page[] = $row;
+      $product[] = $row;
     }
   }
 
@@ -25,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" & isset($_POST['product_topage_id'])) {
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="morestyle.css" />
-  <title><?php echo $product_page[0]['name'] ?> | Project</title>
+  <title><?php echo $product[0]['name'] ?> | Project</title>
 </head>
 
 <body>
@@ -54,18 +53,17 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" & isset($_POST['product_topage_id'])) {
   </header>
 
   <div class="containter text-wrap fw-medium d-flex flex-row flex-nowrap justify-content-center m-5">
-    <img src="assets/<?php $product_page[0]['ImageRef']?>" alt="<?php $product_page[0]['name'] ?>" class="w-25 me-5">
+    <img src="assets/<?php echo $product[0]['ImageRef']?>" alt="<?php $product[0]['name'] ?>" class="w-25 me-5">
     <form action="server.php" method="post" class="ms-5">
-      <p class="fs-2"><?php echo $product_page[0]['name'] ?></p>
-      <p class="fs-5">$<?php echo $product_page[0]['price'] ?></p>
-      <p class="fs-6"><?php echo $product_page[0]['Description'] ?></p>
+      <p class="fs-2"><?php echo $product[0]['name'] ?></p>
+      <p class="fs-5">$<?php echo $product[0]['price'] ?></p>
+      <p class="fs-6"><?php echo $product[0]['Description'] ?></p>
       <input type="number" name="product_quantity" id="" value="1"> <br>
-      <input type="hidden" name="product_id" value="<?php $product_page[0]['id'] ?>">
-      <input type="hidden" name="product_name" value="<?php $product_page[0]['name'] ?>">
-      <input type="hidden" name="product_price" value="<?php $product_page[0]['price'] ?>">
+      <input type="hidden" name="product_id" value="<?php $product[0]['id'] ?>">
+      <input type="hidden" name="product_name" value="<?php $product[0]['name'] ?>">
+      <input type="hidden" name="product_price" value="<?php $product[0]['price'] ?>">
       <input type="submit" value="ADD TO CART" class="btn btn-secondary mt-2 fw-bold ps-5 pe-5 ">
     </form>
   </div>
-  <?php print_r($product_page) ?>
 </body>
 </html>
