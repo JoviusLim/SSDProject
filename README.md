@@ -7,7 +7,7 @@ I used Bootstrap for styles, PHP for serverside.
 **How It Works**
 
 1.  **Connecting to the Database:**
-    Both 'index.php' and product.php connect to the database using the 'db.php' file.
+   'index.php', 'product.php', and 'cart.php' connect to the database using require 'db.php'.
 
 2. **Displaying Products:**
     In 'index.php', the product table is retrieved from the database, and all products are displayed on the page.
