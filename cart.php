@@ -27,6 +27,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" & isset($_POST["product_id"])) {
     }
 }
 
+// Delete Cart Items
+if ($_SERVER['REQUEST_METHOD'] == "POST" & isset($_POST['delete'])) {
+    $productDeleteID = $_POST["delete"];
+    $sql = 'DELETE FROM tempcart WHERE id = ?';
+    $result = $conn->execute_query($sql, [$productDeleteID]);
+
+    $resp = "Product ID: $productDeleteID sucessfully removed from cart!";
+}
+
 // Getting the items in the cart
 $cartList = [];
 $result = $conn->query('SELECT * FROM tempcart');
@@ -83,32 +92,39 @@ $conn->close();
     </header>
 
     <div class="container-fluid">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col">Product ID</th>
-                    <th scope="col">Product Name</th>
-                    <th scope="col">Product Price</th>
-                    <th scope="col">Product Quantity</th>
-                    <th scope="col"></th>
-                    <th scope="col"></th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($cartList as $cartProduct) : ?>
+        <?php if ($result->num_rows > 0) : ?>
+            <table class="table">
+                <thead>
                     <tr>
-                        <form action="" method="post">
-                        <th scope="row"><?= $cartProduct['id'] ?></th>
-                        <td><?= $cartProduct['name'] ?></td>
-                        <td><?= $cartProduct['price'] ?></td>
-                        <td><?= $cartProduct['quantity'] ?></td>
-                        <td><button type="submit" name='edit'>Edit</button></td>
-                        <td><button type="submit" name='delete'>Delete</button></td>
-                        </form>
+                        <th scope="col">Product ID</th>
+                        <th scope="col">Product Name</th>
+                        <th scope="col">Product Price</th>
+                        <th scope="col">Product Quantity</th>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
                     </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    <?php foreach ($cartList as $cartProduct) : ?>
+                        <tr>
+                            <form action="" method="post">
+                                <th scope="row"><?= $cartProduct['id'] ?></th>
+                                <td><?= $cartProduct['name'] ?></td>
+                                <td>$<?= $cartProduct['price'] ?></td>
+                                <td><?= $cartProduct['quantity'] ?></td>
+                                <td><button class="btn btn-primary" type="submit" name='edit' value='<?= $cartProduct['id'] ?>'>EDIT</button></td>
+                                <td><button class="btn btn-danger" type="submit" name='delete' value='<?= $cartProduct['id'] ?>'>DELETE</button></td>
+                            </form>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        <?php else : ?>
+            <h1 class="text-center d-flex flex-row justify-content-center mt-5">Your Cart is empty!</h1>
+            <form action="index.php" class="text-center d-flex flex-row justify-content-center mt-5">
+                <button type="submit" class="btn btn-primary fw-bold">Go Shopping!</button>
+            </form>
+        <?php endif; ?>
     </div>
 
 </body>
