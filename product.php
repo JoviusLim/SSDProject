@@ -58,7 +58,7 @@ $conn->close();
     <form action="cart.php" method="post" class="ms-5">
       <p class="fs-2"><?php echo $product[0]['name'] ?></p>
       <p class="fs-5">$<?php echo $product[0]['price'] ?></p>
-      <p class="fs-6"><?php echo $product[0]['Description'] ?></p>
+      <p class="fs-6 text-wrap"><?php echo $product[0]['Description'] ?></p>
       <input type="number" name="product_quantity" id="" value="1"> <br>
       <input type="hidden" name="product_id" value="<?php echo $product[0]['id'] ?>">
       <input type="hidden" name="product_name" value="<?php echo $product[0]['name'] ?>">
