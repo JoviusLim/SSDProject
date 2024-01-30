@@ -57,12 +57,55 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" & isset($_POST['edit']) | isset($_POST[
     }
 }
 
+// Checkout
+if ($_SERVER["REQUEST_METHOD"] == "POST" & isset($_POST["Checkout"])) {
+    $ProductList = [];
+    
+    $result = $conn->query('SELECT * FROM tempcart');
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $ProductList[] = $row;
+        }
+    }
+
+    // Get OrderID
+    $sql = "SELECT orderID FROM checkout";
+    $result = $conn->query($sql);
+    $orderID = 0;
+
+    $exists = $result->num_rows;
+    if ($exists) {
+        $orderID = $exists+1;
+    } else {
+        $orderID = 1;
+    }
+
+    foreach ($ProductList as $products) {
+        $sql = "INSERT INTO checkout (orderID,product_id, product_name, product_price, product_quantity) VALUES (?,?,?,?,?)";
+        $result = $conn->execute_query($sql, [$orderID,$products['id'], $products['name'], $products['price'], $products['quantity']]);
+        $sqlremove = "DELETE FROM tempcart WHERE id = ?";
+        $result = $conn->execute_query($sqlremove, [$products['id']]);
+    }
+
+    $resp = 'Successful Checkout!';
+}
+
+// Get Total Price of Cart
+function GetTotal($cartList)
+{
+    $totalPrice = 0;
+    foreach ($cartList as $productInCart) {
+        $totalPrice = ($productInCart['price'] * $productInCart['quantity']) + $totalPrice;
+    }
+    return $totalPrice;
+}
+
 // Getting the items in the cart
 $cartList = [];
-$result = $conn->query('SELECT * FROM tempcart');
+$resultTempCart = $conn->query('SELECT * FROM tempcart');
 
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
+if ($resultTempCart->num_rows > 0) {
+    while ($row = $resultTempCart->fetch_assoc()) {
         $cartList[] = $row;
     }
 }
@@ -113,7 +156,7 @@ $conn->close();
     </header>
 
     <div class="container-fluid">
-        <?php if ($result->num_rows > 0) : ?>
+        <?php if ($resultTempCart->num_rows > 0) : ?>
             <table class="table">
                 <thead>
                     <tr>
@@ -148,14 +191,31 @@ $conn->close();
                                         <td><button class="btn btn-primary" type="submit" name='update' value='<?= $cartProduct['id'] ?>'>UPDATE</button></td>
                                     <?php else : ?>
                                         <td><button class="btn btn-primary" type="submit" name='edit' value='<?= $cartProduct['id'] ?>'>EDIT</button></td>
-                                        <?php endif; ?>
+                                    <?php endif; ?>
                                 <?php else : ?>
-                                        <td><button class="btn btn-primary" type="submit" name='edit' value='<?= $cartProduct['id'] ?>'>EDIT</button></td>
+                                    <td><button class="btn btn-primary" type="submit" name='edit' value='<?= $cartProduct['id'] ?>'>EDIT</button></td>
                                 <?php endif; ?>
                                 <td><button class="btn btn-danger" type="submit" name='delete' value='<?= $cartProduct['id'] ?>'>DELETE</button></td>
                             </form>
                         </tr>
                     <?php endforeach; ?>
+                </tbody>
+            </table>
+
+            <table class="table justify-content-evenly container">
+                <thead>
+                    <tr>
+                        <th scope="col">Total Price</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <form action="" method="post">
+                            <td>$<?php echo GetTotal($cartList) ?></td>
+                            <td><button class="btn btn-success" type="submit" name='Checkout' value='checkout'>Checkout</button></td>
+                        </form>
+                    </tr>
                 </tbody>
             </table>
         <?php else : ?>
