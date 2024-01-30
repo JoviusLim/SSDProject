@@ -9,22 +9,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" & isset($_POST["product_id"])) {
     $productQuantity = $_POST['product_quantity'];
 
     if ($productQuantity <= 0) {
-        echo "ERROR: Quantity must not be 0.";
+        echo "ERROR: Quantity must not be 0 or less.";
     } else {
         $sql = 'SELECT id FROM tempcart WHERE id = ?';
-        $result = $conn -> execute_query($sql, [$productId]);
-        $exists = $result -> num_rows;
+        $result = $conn->execute_query($sql, [$productId]);
+        $exists = $result->num_rows;
 
         if ($exists) {
             $sql = 'UPDATE tempcart SET quantity = ?+quantity WHERE id = ?';
-            $result = $conn -> execute_query($sql, [$productQuantity, $productId]);
+            $result = $conn->execute_query($sql, [$productQuantity, $productId]);
             echo "UPDATE";
-        } else {    
+        } else {
             $sql = 'INSERT INTO tempcart (id, name, price, quantity) VALUES (?, ?, ?, ?)';
-            $result = $conn -> execute_query($sql, [$productId, $productName, $productPrice, $productQuantity]);
+            $result = $conn->execute_query($sql, [$productId, $productName, $productPrice, $productQuantity]);
             echo "INSERT";
         }
     }
 }
 
-$conn ->close();
+$conn->close();

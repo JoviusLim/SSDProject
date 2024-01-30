@@ -51,23 +51,23 @@ $conn->close();
 
   <div class="container-fluid text-center d-flex flex-row justify-content-center flex-wrap gap-2">
 
-    <?php foreach ($products  as $product): ?>
-    <div class="card" style="width: 18rem">
-      <img src="assets/<?= $product['ImageRef'] ?>" class="card-img-top" alt="digital camera" />
-      <div class="card-body text-center">
-        <h5 class="card-title"><?= $product['name'] ?></h5>
-        <p class="card-text">$<?= $product['price'] ?></p>
-        <form action="product.php" method="post">
-          <button type="submit" class="btn btn-primary">
-            View Product
-            <input type="hidden" name="product_topage_id" value="<?= $product['id'] ?>">
-          </button>
-        </form>
+    <?php foreach ($products  as $product) : ?>
+      <div class="card" style="width: 18rem">
+        <img src="assets/<?= $product['ImageRef'] ?>" class="card-img-top" alt="digital camera" />
+        <div class="card-body text-center">
+          <h5 class="card-title"><?= $product['name'] ?></h5>
+          <p class="card-text">$<?= $product['price'] ?></p>
+          <form action="product.php" method="post">
+            <button type="submit" class="btn btn-primary">
+              View Product
+              <input type="hidden" name="product_topage_id" value="<?= $product['id'] ?>">
+            </button>
+          </form>
+        </div>
       </div>
-    </div>
     <?php endforeach; ?>
 
-    
+
   </div>
 </body>
 

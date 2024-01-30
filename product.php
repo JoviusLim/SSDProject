@@ -54,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" & isset($_POST['product_topage_id'])) {
   </header>
 
   <div class="containter text-wrap fw-medium d-flex flex-row flex-nowrap justify-content-center m-5">
-    <img src="assets/<?php echo $product[0]['ImageRef']?>" alt="<?php echo $product[0]['name'] ?>" class="w-25 me-5">
+    <img src="assets/<?php echo $product[0]['ImageRef'] ?>" alt="<?php echo $product[0]['name'] ?>" class="w-25 me-5">
     <form action="server.php" method="post" class="ms-5">
       <p class="fs-2"><?php echo $product[0]['name'] ?></p>
       <p class="fs-5">$<?php echo $product[0]['price'] ?></p>
@@ -67,4 +67,5 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" & isset($_POST['product_topage_id'])) {
     </form>
   </div>
 </body>
+
 </html>
