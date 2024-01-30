@@ -1,3 +1,45 @@
+<?php
+require 'db.php';
+
+// Handling cart
+if ($_SERVER["REQUEST_METHOD"] == "POST" & isset($_POST["product_id"])) {
+    $productId = $_POST['product_id'];
+    $productName = $_POST['product_name'];
+    $productPrice = $_POST['product_price'];
+    $productQuantity = $_POST['product_quantity'];
+
+    if ($productQuantity <= 0) {
+        $resp = "Failed to Add to Cart!";
+    } else {
+        $sql = 'SELECT id FROM tempcart WHERE id = ?';
+        $result = $conn->execute_query($sql, [$productId]);
+        $exists = $result->num_rows;
+
+        if ($exists) {
+            $sql = 'UPDATE tempcart SET quantity = ?+quantity WHERE id = ?';
+            $result = $conn->execute_query($sql, [$productQuantity, $productId]);
+            $resp = "Sucessfully Added to Cart!";
+        } else {
+            $sql = 'INSERT INTO tempcart (id, name, price, quantity) VALUES (?, ?, ?, ?)';
+            $result = $conn->execute_query($sql, [$productId, $productName, $productPrice, $productQuantity]);
+            $resp = "Sucessfully Added to Cart!";
+        }
+    }
+}
+
+// Getting the items in the cart
+$cartList = [];
+$result = $conn->query('SELECT * FROM tempcart');
+
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $cartList[] = $row;
+    }
+}
+
+$conn->close();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -33,8 +75,41 @@
                 </div>
             </div>
         </nav>
+        <?php if (isset($resp)) : ?>
+            <div class="alert alert-info" role="alert">
+                <?php echo $resp ?>
+            </div>
+        <?php endif; ?>
     </header>
 
+    <div class="container-fluid">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Product ID</th>
+                    <th scope="col">Product Name</th>
+                    <th scope="col">Product Price</th>
+                    <th scope="col">Product Quantity</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($cartList as $cartProduct) : ?>
+                    <tr>
+                        <form action="" method="post">
+                        <th scope="row"><?= $cartProduct['id'] ?></th>
+                        <td><?= $cartProduct['name'] ?></td>
+                        <td><?= $cartProduct['price'] ?></td>
+                        <td><?= $cartProduct['quantity'] ?></td>
+                        <td><button type="submit" name='edit'>Edit</button></td>
+                        <td><button type="submit" name='delete'>Delete</button></td>
+                        </form>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
 
 </body>
 
