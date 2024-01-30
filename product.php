@@ -59,9 +59,9 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" & isset($_POST['product_topage_id'])) {
       <p class="fs-5">$<?php echo $product[0]['price'] ?></p>
       <p class="fs-6"><?php echo $product[0]['Description'] ?></p>
       <input type="number" name="product_quantity" id="" value="1"> <br>
-      <input type="hidden" name="product_id" value="<?php $product[0]['id'] ?>">
-      <input type="hidden" name="product_name" value="<?php $product[0]['name'] ?>">
-      <input type="hidden" name="product_price" value="<?php $product[0]['price'] ?>">
+      <input type="hidden" name="product_id" value="<?php echo $product[0]['id'] ?>">
+      <input type="hidden" name="product_name" value="<?php echo $product[0]['name'] ?>">
+      <input type="hidden" name="product_price" value="<?php echo $product[0]['price'] ?>">
       <input type="submit" value="ADD TO CART" class="btn btn-secondary mt-2 fw-bold ps-5 pe-5 ">
     </form>
   </div>
