@@ -16,13 +16,13 @@ I used Bootstrap for styles, PHP for serverside.
     In 'product.php', the product ID is obtained from 'index.php' when the user clicks 'view product'.
     
 4.  **Adding to Cart:**
-    When the user clicks 'add to cart' in product.php, the product ID is added to the 'cart' table in the database.
+    When the user clicks 'add to cart' in 'product.php', the product ID is added to the 'tempcart' table in the database.
 
 5.  **Displaying and Managing Cart:**
-    cart.php' retrieves all items from the 'cart' table and displays them. Users can change the quantity and delete items from the cart.
+    'cart.php' retrieves all items from the 'tempcart' table and displays them. Users can change the quantity and delete items from the cart.
     
 6.   **Checkout Process:**
-     When the user clicks 'Checkout' in cart.php, all items in the cart are moved to the 'checkout' database with an assigned order ID.
+     When the user clicks 'Checkout' in 'cart.php', all items in the cart are moved to the 'checkout' database with an assigned order ID.
 
 **Database Schema**
 
