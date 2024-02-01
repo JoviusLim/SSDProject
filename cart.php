@@ -69,13 +69,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" & isset($_POST["Checkout"])) {
     }
 
     // Get OrderID
-    $sql = "SELECT orderID FROM checkout";
+    $sql = "SELECT MAX(orderID) FROM checkout";
     $result = $conn->query($sql);
     $orderID = 0;
 
     $exists = $result->num_rows;
     if ($exists) {
-        $orderID = $exists+1;
+        $row = $result->fetch_assoc();
+        $orderID = $row['MAX(orderID)']+1;
     } else {
         $orderID = 1;
     }
@@ -149,8 +150,9 @@ $conn->close();
             </div>
         </nav>
         <?php if (isset($resp)) : ?>
-            <div class="alert alert-info" role="alert">
+            <div class="alert alert-info alert-dismissible" role="alert">
                 <?php echo $resp ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         <?php endif; ?>
     </header>
