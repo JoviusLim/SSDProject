@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" & isset($_POST['edit']) | isset($_POST[
         $updateid = $_POST['update'];
         $updatequantity = $_POST['updatequantity'];
 
-        if ($updateid > 0) {
+        if ($updatequantity > 0) {
             $sql = 'UPDATE tempcart SET quantity = ? WHERE id = ?';
             $result = $conn->execute_query($sql, [$updatequantity, $updateid]);
             $resp = "Product ID: $updateid successfully updated!";
